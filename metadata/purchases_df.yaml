@@ -1,8 +1,29 @@
-description: Customer purchases and return status
+description: "**Table: Purchases and Returns**\n\nThis table records every customer\
+  \ order and whether the order was returned. It includes the date and time of the\
+  \ sale, the product bought, the quantity, the price, any discount applied, the total\
+  \ amount paid, the channel through which the purchase was made (online, store, mobile),\
+  \ and the customer who made the purchase.  \n\n**Primary purpose / use cases** \
+  \ \n- **Sales performance** \u2013 view total revenue, average sale size, and top\u2011\
+  selling products.  \n- **Channel analysis** \u2013 compare how many sales occur\
+  \ in each channel and how channel mix affects revenue.  \n- **Return monitoring**\
+  \ \u2013 calculate return rates, identify high\u2011return products, and assess\
+  \ the impact of returns on cash flow.  \n- **Discount effectiveness** \u2013 see\
+  \ how discounts influence the quantity sold and the final revenue.  \n- **Revenue\
+  \ forecasting** \u2013 feed into budgeting and planning by linking past sales, discounts,\
+  \ and returns to future projections.  \n\n**Key relationships**  \n- Each record\
+  \ links to a **customer** (customer_id) so it can be merged with customer profiles\
+  \ for segmentation.  \n- Each record references a **product** (product_id) for inventory\
+  \ and product\u2011level analysis.  \n- The **channel** field ties sales to marketing\
+  \ and operations, helping to evaluate channel strategies.  \n\n**Typical users**\
+  \  \n- **Sales & marketing teams** \u2013 to understand channel performance and\
+  \ discount impact.  \n- **Finance & accounting** \u2013 to track revenue, returns,\
+  \ and discount costs.  \n- **Operations & inventory managers** \u2013 to anticipate\
+  \ demand and manage stock levels.  \n- **Data analysts & business intelligence**\
+  \ \u2013 to build dashboards, run trend analyses, and support strategic decisions."
 fields:
   channel:
     data_type: VARCHAR
-    description: 'Purchase channel used (Online, Store, Mobile)'
+    description: Purchase channel used (Online, Store, Mobile)
     null_count: 0
     unique_values:
       Mobile: 1661
@@ -10,7 +31,7 @@ fields:
       Store: 1721
   customer_id:
     data_type: INTEGER
-    description: 'Reference to customer who made purchase'
+    description: Reference to customer who made purchase
     null_count: 0
     statistics:
       max: 1000.0
@@ -18,7 +39,7 @@ fields:
       min: 1.0
   discount_applied:
     data_type: DECIMAL
-    description: 'Discount percentage applied (0.0-0.3)'
+    description: Discount percentage applied (0.0-0.3)
     null_count: 0
     statistics:
       max: 0.3
@@ -26,7 +47,7 @@ fields:
       min: 0.0
   price:
     data_type: DECIMAL
-    description: 'Product unit price at time of purchase'
+    description: Product unit price at time of purchase
     null_count: 0
     statistics:
       max: 386.26
@@ -34,7 +55,7 @@ fields:
       min: 10.2
   product_id:
     data_type: INTEGER
-    description: 'Reference to purchased product'
+    description: Reference to purchased product
     null_count: 0
     statistics:
       max: 200.0
@@ -42,11 +63,11 @@ fields:
       min: 1.0
   purchase_date:
     data_type: TIMESTAMP
-    description: 'Date and time of purchase transaction'
+    description: Date and time of purchase transaction
     null_count: 0
   purchase_id:
     data_type: INTEGER
-    description: 'Unique purchase transaction identifier'
+    description: Unique purchase transaction identifier
     null_count: 0
     statistics:
       max: 5000.0
@@ -54,7 +75,7 @@ fields:
       min: 1.0
   quantity:
     data_type: INTEGER
-    description: 'Number of units purchased'
+    description: Number of units purchased
     null_count: 0
     unique_values:
       1: 633
@@ -69,14 +90,14 @@ fields:
       10: 1
   returned:
     data_type: BOOLEAN
-    description: 'Whether purchase was returned (true/false)'
+    description: Whether purchase was returned (true/false)
     null_count: 0
     unique_values:
       false: 4593
       true: 407
   total_amount:
     data_type: DECIMAL
-    description: 'Final purchase amount after discounts in USD'
+    description: Final purchase amount after discounts in USD
     null_count: 0
     statistics:
       max: 2248.03

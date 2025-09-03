@@ -1,8 +1,25 @@
-description: Product catalog with pricing and inventory
+description: "\nThe \u201Cproducts_df\u201D table is a product catalog that holds\
+  \ the core information businesses need about every item they sell.  \nIt lists each\
+  \ product\u2019s brand, category, cost, retail price, customer rating and how many\
+  \ units are in stock.  \n\n**Primary purpose**  \n- Keep a single, up\u2011to\u2011\
+  date view of what the company offers and how it\u2019s priced.  \n- Provide the\
+  \ data needed for pricing decisions, inventory management, and sales forecasting.\
+  \  \n\n**Typical use cases**  \n- Merchandisers set price points and discount plans.\
+  \  \n- Supply\u2011chain planners monitor stock levels to trigger reorder signals.\
+  \  \n- Finance analysts calculate margin (price \u2013 cost) and profitability by\
+  \ brand or category.  \n- Marketing teams identify high\u2011rating, high\u2011\
+  margin products for promotion.  \n\n**Key relationships**  \n- Linked to sales orders\
+  \ and customer transactions (which product was sold, at what price).  \n- Connected\
+  \ to supplier information for cost updates and new product introductions.  \n- Tied\
+  \ to inventory records that track actual warehouse levels and replenishment.  \n\
+  \n**Who uses it**  \n- Merchandising and product managers for assortment and pricing\
+  \ strategy.  \n- Supply\u2011chain and inventory specialists for stock control.\
+  \  \n- Finance and analytics teams for margin and profitability analysis.  \n- Marketing\
+  \ for targeting high\u2011rating, high\u2011margin items.\n"
 fields:
   brand:
     data_type: VARCHAR
-    description: 'Product brand name'
+    description: Product brand name
     null_count: 0
     unique_values:
       Adidas: 34
@@ -12,7 +29,7 @@ fields:
       Samsung: 41
   category:
     data_type: VARCHAR
-    description: 'Product category classification'
+    description: Product category classification
     null_count: 0
     unique_values:
       Clothing: 65
@@ -21,7 +38,7 @@ fields:
       Sports: 39
   cost:
     data_type: DECIMAL
-    description: 'Product cost basis in USD'
+    description: Product cost basis in USD
     null_count: 0
     statistics:
       max: 177.8
@@ -29,7 +46,7 @@ fields:
       min: 5.22
   price:
     data_type: DECIMAL
-    description: 'Product retail price in USD'
+    description: Product retail price in USD
     null_count: 0
     statistics:
       max: 386.26
@@ -37,7 +54,7 @@ fields:
       min: 10.2
   product_id:
     data_type: INTEGER
-    description: 'Unique product identifier'
+    description: Unique product identifier
     null_count: 0
     statistics:
       max: 200.0
@@ -45,7 +62,7 @@ fields:
       min: 1.0
   rating:
     data_type: DECIMAL
-    description: 'Average customer rating (1-5 scale)'
+    description: Average customer rating (1-5 scale)
     null_count: 0
     statistics:
       max: 4.99
@@ -53,7 +70,7 @@ fields:
       min: 1.02
   stock_quantity:
     data_type: INTEGER
-    description: 'Current inventory quantity available'
+    description: Current inventory quantity available
     null_count: 0
     statistics:
       max: 998.0

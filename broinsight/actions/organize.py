@@ -17,8 +17,8 @@ class Organize(Action):
         return "default"
 
     def run(self, shared:Shared):
-        # metadata = shared.metadata_loader.get_summary_prompt()
-        metadata = shared.metadata_loader.construct_prompt_context()
+        metadata = shared.metadata_loader.get_summary_prompt()
+        # metadata = shared.metadata_loader.construct_prompt_context()
         user_input = shared.user_input
         prompt = "METADATAS:\n\n{metadata}\n\nUSER_INPUT:\n\n{user_input}\n\n".format(metadata=metadata, user_input=user_input)
         response = self.model.run(
