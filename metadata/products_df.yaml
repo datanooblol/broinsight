@@ -1,0 +1,62 @@
+description: Product catalog with pricing and inventory
+fields:
+  brand:
+    data_type: VARCHAR
+    description: 'Product brand name'
+    null_count: 0
+    unique_values:
+      Adidas: 34
+      Apple: 44
+      IKEA: 43
+      Nike: 38
+      Samsung: 41
+  category:
+    data_type: VARCHAR
+    description: 'Product category classification'
+    null_count: 0
+    unique_values:
+      Clothing: 65
+      Electronics: 46
+      Home: 50
+      Sports: 39
+  cost:
+    data_type: DECIMAL
+    description: 'Product cost basis in USD'
+    null_count: 0
+    statistics:
+      max: 177.8
+      mean: 35.74065
+      min: 5.22
+  price:
+    data_type: DECIMAL
+    description: 'Product retail price in USD'
+    null_count: 0
+    statistics:
+      max: 386.26
+      mean: 56.91210000000001
+      min: 10.2
+  product_id:
+    data_type: INTEGER
+    description: 'Unique product identifier'
+    null_count: 0
+    statistics:
+      max: 200.0
+      mean: 100.5
+      min: 1.0
+  rating:
+    data_type: DECIMAL
+    description: 'Average customer rating (1-5 scale)'
+    null_count: 0
+    statistics:
+      max: 4.99
+      mean: 2.9585000000000004
+      min: 1.02
+  stock_quantity:
+    data_type: INTEGER
+    description: 'Current inventory quantity available'
+    null_count: 0
+    statistics:
+      max: 998.0
+      mean: 502.745
+      min: 6.0
+table_name: products_df

@@ -1,0 +1,85 @@
+description: Customer purchases and return status
+fields:
+  channel:
+    data_type: VARCHAR
+    description: 'Purchase channel used (Online, Store, Mobile)'
+    null_count: 0
+    unique_values:
+      Mobile: 1661
+      Online: 1618
+      Store: 1721
+  customer_id:
+    data_type: INTEGER
+    description: 'Reference to customer who made purchase'
+    null_count: 0
+    statistics:
+      max: 1000.0
+      mean: 503.3334
+      min: 1.0
+  discount_applied:
+    data_type: DECIMAL
+    description: 'Discount percentage applied (0.0-0.3)'
+    null_count: 0
+    statistics:
+      max: 0.3
+      mean: 0.149418
+      min: 0.0
+  price:
+    data_type: DECIMAL
+    description: 'Product unit price at time of purchase'
+    null_count: 0
+    statistics:
+      max: 386.26
+      mean: 57.094772
+      min: 10.2
+  product_id:
+    data_type: INTEGER
+    description: 'Reference to purchased product'
+    null_count: 0
+    statistics:
+      max: 200.0
+      mean: 98.973
+      min: 1.0
+  purchase_date:
+    data_type: TIMESTAMP
+    description: 'Date and time of purchase transaction'
+    null_count: 0
+  purchase_id:
+    data_type: INTEGER
+    description: 'Unique purchase transaction identifier'
+    null_count: 0
+    statistics:
+      max: 5000.0
+      mean: 2500.5
+      min: 1.0
+  quantity:
+    data_type: INTEGER
+    description: 'Number of units purchased'
+    null_count: 0
+    unique_values:
+      1: 633
+      2: 1347
+      3: 1380
+      4: 879
+      5: 472
+      6: 185
+      7: 69
+      8: 30
+      9: 4
+      10: 1
+  returned:
+    data_type: BOOLEAN
+    description: 'Whether purchase was returned (true/false)'
+    null_count: 0
+    unique_values:
+      false: 4593
+      true: 407
+  total_amount:
+    data_type: DECIMAL
+    description: 'Final purchase amount after discounts in USD'
+    null_count: 0
+    statistics:
+      max: 2248.03
+      mean: 148.477898
+      min: 7.86
+table_name: purchases_df

@@ -1,0 +1,82 @@
+description: Customer information with loyalty score
+fields:
+  age:
+    data_type: INTEGER
+    description: 'Customer age in years (18-79)'
+    null_count: 0
+    statistics:
+      max: 79.0
+      mean: 49.857
+      min: 18.0
+  city:
+    data_type: VARCHAR
+    description: 'Customer residential city'
+    null_count: 0
+    unique_values:
+      Chicago: 176
+      Houston: 208
+      Los Angeles: 207
+      New York: 194
+      Phoenix: 215
+  customer_id:
+    data_type: INTEGER
+    description: 'Unique customer identifier'
+    null_count: 0
+    statistics:
+      max: 1000.0
+      mean: 500.5
+      min: 1.0
+  customer_segment:
+    data_type: VARCHAR
+    description: 'Customer tier classification (Basic, Standard, Premium)'
+    null_count: 0
+    unique_values:
+      Basic: 358
+      Premium: 312
+      Standard: 330
+  gender:
+    data_type: VARCHAR
+    description: 'Customer gender (M/F)'
+    null_count: 0
+    unique_values:
+      F: 477
+      M: 523
+  income:
+    data_type: INTEGER
+    description: 'Annual household income in USD'
+    null_count: 0
+    statistics:
+      max: 152396.0
+      mean: 66455.767
+      min: -19670.0
+  loyalty_score:
+    data_type: INTEGER
+    description: 'Customer loyalty rating (1-100 scale)'
+    null_count: 0
+    statistics:
+      max: 100.0
+      mean: 51.532
+      min: 1.0
+  preferred_channel:
+    data_type: VARCHAR
+    description: 'Customer preferred shopping channel (Online, Store, Mobile)'
+    null_count: 0
+    unique_values:
+      Mobile: 310
+      Online: 330
+      Store: 360
+  signup_date:
+    data_type: TIMESTAMP
+    description: 'Date when customer registered account'
+    null_count: 0
+  state:
+    data_type: VARCHAR
+    description: 'Customer residential state (US state code)'
+    null_count: 0
+    unique_values:
+      CA: 197
+      FL: 216
+      IL: 201
+      NY: 207
+      TX: 179
+table_name: customers_df
