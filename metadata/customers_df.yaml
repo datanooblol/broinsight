@@ -1,11 +1,24 @@
-description: "\nThis table holds the key details about each customer, including who\
-  \ they are, where they live, how much they earn, and how loyal they are to the brand.\
-  \ It is used by marketing, sales, and product teams to segment customers, target\
-  \ promotions, and measure loyalty. The data links directly to customer\u2011service\
-  \ interactions, purchase history, and campaign results, helping the company tailor\
-  \ offers, forecast revenue, and improve retention. Typical users are marketing analysts,\
-  \ loyalty program managers, and senior executives who need a clear view of customer\
-  \ profiles and engagement levels."
+description: "\nThe \u201Ccustomers_df\u201D table is the company\u2019s master customer\
+  \ profile repository.  \nIt contains a unique ID for each customer and key attributes\
+  \ such as age, gender, city and state, income, the loyalty score, and the channel\
+  \ they prefer to shop through.  The table also records the date each customer signed\
+  \ up and the tier (Basic, Standard, Premium) that the company uses to group customers.\n\
+  \nBusiness purpose  \n\u2013 Provides a single, accurate view of who the customers\
+  \ are and how they behave.  \n\u2013 Enables the marketing team to segment the customer\
+  \ base, create targeted campaigns, and measure the effectiveness of those campaigns.\
+  \  \n\u2013 Allows sales to prioritize high\u2011value, high\u2011loyalty prospects\
+  \ and tailor outreach.  \n\u2013 Gives product and service teams insight into demographic\
+  \ and geographic trends that can guide new offerings or pricing strategies.  \n\u2013\
+  \ Supports analytics on revenue forecasting, retention and churn by linking profile\
+  \ data to purchase history and service interactions.\n\nKey relationships  \n\u2013\
+  \ Customer IDs link this table to sales, transactions, support tickets, and campaign\
+  \ response data.  \n\u2013 The loyalty score and segment fields are used in predictive\
+  \ models for upsell and churn prediction.  \n\u2013 The signup date and channel\
+  \ preference help measure acquisition cost and marketing mix effectiveness.\n\n\
+  Typical users  \nMarketing analysts, data scientists, loyalty program managers,\
+  \ sales leaders, and senior executives who need a clear, up\u2011to\u2011date view\
+  \ of customer demographics, segmentation, and engagement levels for strategic decision\u2011\
+  making."
 fields:
   age:
     data_type: INTEGER
