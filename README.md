@@ -8,13 +8,26 @@ Most people have data but lack the analytics or coding skills to extract meaning
 
 ## How It Works
 
-BroInsight uses a flow-based architecture to process your questions:
+BroInsight uses a sophisticated **flow-based architecture** with dynamic routing and intelligent error recovery:
 
-1. **Organize** - Routes your question (data query vs general chat)
-2. **Select Metadata** - Identifies relevant tables from your data
-3. **Generate SQL** - Converts your question to SQL query
-4. **Retrieve** - Executes the query against your data
-5. **Chat** - Provides conversational insights and answers
+### Flow Architecture
+```
+Start → UserInput → Organize → [3-way intelligent routing]
+                      ├─ "guide" → GuideQuestion → UserInput (loop)
+                      ├─ "select_metadata" → SelectMetadata → GenerateSQL → Retrieve → [error handling]
+                      │                                                        ├─ retry → GenerateSQL (up to 3x)
+                      │                                                        └─ fallback → Chat → UserInput
+                      └─ "default" → Chat → UserInput (loop)
+```
+
+### Core Actions
+1. **UserInput** - Handles input modes (ask/chat) and exit detection
+2. **Organize** - Intelligent 3-way routing (query/guide/default) based on user intent
+3. **GuideQuestion** - Provides data exploration suggestions and help
+4. **SelectMetadata** - Identifies relevant tables from available data
+5. **GenerateSQL** - Converts natural language to SQL with error context
+6. **Retrieve** - Executes queries with retry mechanism and graceful fallback
+7. **Chat** - Provides conversational insights and answers
 
 ## Key Features
 
@@ -23,10 +36,13 @@ BroInsight uses a flow-based architecture to process your questions:
 - **Metadata-Driven**: Understands your data structure automatically
 - **Conversational**: Maintains context across multiple questions
 - **Jupyter-Ready**: Designed for data science workflows
+- **Dynamic Routing**: Intelligent flow control based on user intent and processing results
+- **Error Recovery**: Automatic SQL retry with up to 3 attempts and graceful fallback
+- **User Guidance**: Built-in help system for data exploration
 
 ## Development Roadmap
 
-### Phase 1: Core Agent ✅ (v0.1.1)
+### Phase 1: Core Agent ✅ (v0.1.0)
 - ✅ Basic BroInsight agent for Jupyter Lab
 - ✅ One-shot Q&A with `ask()` method
 - ✅ Interactive chat sessions with `chat()` method
@@ -34,12 +50,15 @@ BroInsight uses a flow-based architecture to process your questions:
 - ✅ Conversational data insights
 - ✅ Happy path functionality working
 
-### Phase 2: Reliability & User Guidance ✅ (v0.1.2)
+### Phase 2: Reliability & User Guidance ✅ (v0.1.1)
 - ✅ SQL error retry mechanism with fallback
 - ✅ Graceful failure recovery and user-friendly error messages
 - ✅ Guided questions and data exploration assistance
 - ✅ Enhanced routing with help/suggestion system
-- 📋 Session logging with DuckDB
+- ✅ Dynamic flow control with conditional routing
+- ✅ Comprehensive error handling across all actions
+- ✅ Empty result detection and user feedback
+- ✅ Complete session logging with DuckDB
 
 ### Phase 3: Transparency & Guidance
 - 📋 Session inspection and audit trails
@@ -65,31 +84,33 @@ BroInsight uses a flow-based architecture to process your questions:
 ## Quick Start
 
 ```python
-from broinsight import BroInsight
+from broinsight import BroInsight, Shared
 from brollm import OpenAIModel  # or your preferred LLM
 
 # Initialize your LLM
 model = OpenAIModel(api_key="your-key")
 
-# Create BroInsight agent
-agent = BroInsight(model)
+# Create shared state with your question
+shared = Shared(model=model)
+shared.messages = [model.UserMessage("What's the average customer age?")]
 
-# One-shot Q&A
-messages = agent.ask("What's the average customer age?")
-print(messages)  # See the conversation
+# Process the question
+result = BroInsight.chat(shared)
 
-# Interactive chat session
-agent.chat()  # Start conversational mode
+# View the conversation
+for msg in result.messages:
+    print(f"{msg['role']}: {msg['content']}")
 ```
 
 ## Requirements
 
 - Python 3.12+
-- pandas
-- duckdb
-- brollm (LLM interface)
-- broflow (workflow engine)
-- broprompt (prompt management)
+- pandas>=2.3.2
+- duckdb>=1.3.2
+- pydantic>=2.11.7
+- brollm>=0.1.2 (LLM interface)
+- broflow>=0.1.5 (workflow engine)
+- broprompt>=0.1.5 (prompt management)
 
 ## Contributing
 

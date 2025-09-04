@@ -11,6 +11,7 @@ class DuckConnector:
         self.data_db_path = data_db_path
         self.metadata_db_path = metadata_db_path
         self.data_conn = duckdb.connect(data_db_path)
+        self._registered_tables = {}  # Track registered DataFrames
         self._init_metadata_schema()
     
     def _execute_metadata(self, sql: str, params: list = None):
@@ -50,10 +51,21 @@ class DuckConnector:
     
     def execute_query(self, sql: str) -> pd.DataFrame:
         """Execute query on data connection and return DataFrame"""
-        return self.data_conn.execute(sql).fetch_df()
+        with duckdb.connect(self.data_db_path) as conn:
+            # Re-register all tables that were registered before
+            if hasattr(self, '_registered_tables'):
+                for table_name, df in self._registered_tables.items():
+                    conn.register(table_name, df)
+            return conn.execute(sql).fetch_df()
     
     def register_dataframe(self, df: pd.DataFrame, table_name: str):
         """Register DataFrame as table in data connection"""
+        # Keep track of registered tables for re-registration
+        if not hasattr(self, '_registered_tables'):
+            self._registered_tables = {}
+        self._registered_tables[table_name] = df
+        
+        # Register in current connection
         self.data_conn.register(table_name, df)
     
     def register_metadata_from_yaml(self, yaml_dir: str):

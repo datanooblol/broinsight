@@ -1,5 +1,5 @@
-from . import Action, Shared
-from brollm import BaseLLM
+from . import Action, BaseLLM
+from .interface import Shared
 import yaml
 
 class Organize(Action):
@@ -19,16 +19,28 @@ class Organize(Action):
         return "default"
 
     def run(self, shared:Shared):
-        metadata = shared.metadata_loader.get_summary_prompt()
-        user_input = shared.user_input
-        shared.messages.append(self.model.UserMessage(text=user_input))
-        user_chat_history = user_input
-        # user_chat_history = [m['content'][0]['text'] for m in shared.messages if m['role']=='user']
-        # user_chat_history = "\n".join(user_chat_history)
-        prompt = "METADATAS:\n\n{metadata}\n\nUSER_INPUT:\n\n{user_input}\n\n".format(metadata=metadata, user_input=user_chat_history)
-        response = self.model.run(
-            system_prompt=self.system_prompt,
-            messages=[self.model.UserMessage(text=prompt)]
-        )
-        self.next_action = self.parse_response(response)
+        # Add user input to messages if not already there
+        if shared.db is None and shared.metadata_db is None:
+            return shared
+        
+        metadata = shared.metadata_db.get_summary_prompt()
+
+        user_input = shared.messages[-1]['content']
+        
+        prompt = "METADATAS:\n\n{metadata}\n\nUSER_INPUT:\n\n{user_input}\n\n".format(metadata=metadata, user_input=user_input)
+        try:
+            response = self.model.run(
+                system_prompt=self.system_prompt,
+                messages=[self.model.UserMessage(text=prompt)]
+            )
+            shared.input_token += response['tokens']['input']
+            shared.output_token += response['tokens']['output']        
+            self.next_action = self.parse_response(response['content'])
+            shared.session_logger.log(
+                action=self.__class__.__name__, input_data=prompt, output_data=response['content'], status='success'
+            )
+        except Exception as e:
+            shared.session_logger.log(
+                action=self.__class__.__name__, input_data=prompt, status='failed', error_message=str(e)
+            )            
         return shared

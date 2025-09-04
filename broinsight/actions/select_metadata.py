@@ -1,5 +1,5 @@
-from . import Action, Shared
-from brollm import BaseLLM
+from . import Action, BaseLLM
+from .interface import Shared
 import yaml
 
 class SelectMetadata(Action):
@@ -15,18 +15,26 @@ class SelectMetadata(Action):
         return response
 
     def run(self, shared:Shared):
-        metadata = shared.metadata_loader.construct_prompt_context()
-        user_chat_history = [m['content'][0]['text'] for m in shared.messages if m['role']=='user']
+        metadata = shared.metadata_db.construct_prompt_context()
+        user_chat_history = [m['content'] for m in shared.messages if m['role']=='user']
         user_chat_history = "\n".join(user_chat_history)
         prompt = "METADATAS:\n\n{metadata}\n\nUSER_INPUT:\n\n{user_input}\n\n".format(metadata=metadata, user_input=user_chat_history)
-        messages = shared.messages.copy()
-        messages.append(self.model.UserMessage(text=prompt))
-        response = self.model.run(
-            system_prompt=self.system_prompt,
-            messages=messages
-        )
-        tables = self.parse_response(response)
-        shared.selected_metadata = []
-        for table in set(tables):
-            shared.selected_metadata.append(table)
+        try:
+            response = self.model.run(
+                system_prompt=self.system_prompt,
+                messages=[self.model.UserMessage(text=prompt)]
+            )
+            shared.input_token += response['tokens']['input']
+            shared.output_token += response['tokens']['output']        
+            tables = self.parse_response(response['content'])
+            shared.selected_metadata = []
+            for table in set(tables):
+                shared.selected_metadata.append(table)
+            shared.session_logger.log(
+                action=self.__class__.__name__, input_data=prompt, output_data=response['content'], status='success'
+            )
+        except Exception as e:
+            shared.session_logger.log(
+                action=self.__class__.__name__, input_data=prompt, status='failed', error_message=str(e)
+            )            
         return shared

@@ -1,60 +1,49 @@
 # Version History
 
-## v0.1.2 (Current)
+## v0.1.1 (Current - Pre-Launch)
 
-### New Features
-- **Error Handling & Retry System**: Automatic SQL error detection and retry with up to 2 attempts
+### Phase 2 Complete: Reliability & User Guidance ✅
+- **Dynamic Flow Architecture**: Sophisticated flow-based system with conditional routing
+- **3-Way Intelligent Routing**: Organize action routes to query/guide/default based on user intent
+- **Error Handling & Retry System**: Automatic SQL error detection and retry with up to 3 attempts
 - **Fallback Mechanism**: Graceful degradation to conversational help when retries fail
 - **Guided Questions**: Smart routing to help users discover what they can ask about their data
-- **Enhanced Organize Action**: Three-way routing (query/guide/default) with explicit examples
-- **User Assistance**: Dedicated GuideQuestion action for data exploration suggestions
+- **Empty Result Detection**: Handles successful queries that return no data with user feedback
+- **Complete Error Coverage**: All actions have comprehensive error handling and logging
 
 ### Technical Improvements
-- Enhanced organize.md prompt with clear routing examples
-- New guide_question.md prompt for generating helpful suggestions
-- Improved error context passing between actions
-- Better user experience for failed queries
+- Fixed retry logic bug (was allowing n+1 attempts instead of n)
+- Added missing error handling to GuideQuestion and Organize actions
+- Enhanced session logging with empty result detection
+- Improved user experience for all failure scenarios
+- Production-ready reliability across entire pipeline
 
-### Phase 2 Complete ✅
-- Robust error handling across the pipeline
-- User-friendly guidance system
-- Reliable fallback mechanisms
-- Enhanced user experience for data exploration
+### Flow Architecture
+```
+Start → UserInput → Organize → [3-way intelligent routing]
+                      ├─ "guide" → GuideQuestion → UserInput (loop)
+                      ├─ "select_metadata" → SelectMetadata → GenerateSQL → Retrieve → [error handling]
+                      │                                                        ├─ retry → GenerateSQL (up to 3x)
+                      │                                                        └─ fallback → Chat → UserInput
+                      └─ "default" → Chat → UserInput (loop)
+```
 
 ### Next: Phase 3 Planning
-- Session logging and audit trails
-- Query execution history
-- Performance monitoring
-
-## v0.1.1
-
-### New Features
-- **BroInsight Wrapper Class**: Added user-friendly interface with two interaction modes
-  - `ask(question)` - One-shot Q&A mode that returns conversation messages
-  - `chat()` - Interactive chat mode for exploratory conversations
-- **Dual Mode Support**: Flow now supports both pre-populated questions and interactive input
-- **Improved Message Handling**: Fixed conversation flow and message management
-
-### Technical Changes
-- Modified `UserInput` action to detect pre-populated questions (one-shot mode)
-- Created `BroInsight` wrapper class in `broinsight/broinsight.py`
-- Updated `Chat` action for better message handling
-- Added proper exports in `__init__.py`
-
-### Phase 1 Complete ✅
-- Basic BroInsight agent working in Jupyter Lab
-- One-shot Q&A and interactive chat sessions implemented
-- Natural language to SQL conversion functional
-- Conversational data insights working on happy path
-
-### Next: Phase 2 Planning
-- Error handling for each pipeline stage
-- Guided questions based on metadata for chat mode
-- Graceful failure recovery
+- Session inspection and audit trails
+- Query execution history and performance monitoring
+- Advanced metadata exploration tools
 
 ## v0.1.0
 
-### Initial Release
+### Phase 1 Complete: Core Agent ✅
+- Basic BroInsight agent for Jupyter Lab
+- One-shot Q&A with `ask()` method
+- Interactive chat sessions with `chat()` method
+- Natural language to SQL conversion
+- Conversational data insights
+- Happy path functionality working
+
+### Initial Release Features
 - Core flow-based architecture using broflow
 - Basic actions: Organize, SelectMetadata, GenerateSQL, Retrieve, Chat
 - Metadata system with YAML-based table descriptions
