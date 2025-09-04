@@ -10,6 +10,8 @@ class Chat(Action):
     def create_prompt(self, shared:Shared):
         if shared.query_result is None:
             prompt = shared.user_input
+        elif shared.fallback_message is not None:
+            prompt = f"{shared.fallback_message}\n\nUser question: {shared.user_input}\n\nPlease explain what went wrong and suggest how to rephrase the question."
         else:
             prompt = [
                 "DATA:\n\n{result}\n\n".format(result=shared.query_result.to_string(index=False, max_cols=None)),
@@ -19,11 +21,10 @@ class Chat(Action):
         return prompt
 
     def run(self, shared:Shared):
-        messages = shared.messages
         prompt = self.create_prompt(shared)
         
         # Create temporary messages for LLM call
-        temp_messages = messages + [self.model.UserMessage(text=prompt)]
+        temp_messages = shared.messages[:-1].copy() + [self.model.UserMessage(text=prompt)]
         
         response = self.model.run(
             system_prompt=self.system_prompt,
@@ -31,8 +32,7 @@ class Chat(Action):
         )
         
         # Add the actual conversation to shared messages
-        messages.append(self.model.UserMessage(text=shared.user_input))
-        messages.append(self.model.AIMessage(text=response))
+        shared.messages.append(self.model.AIMessage(text=response))
         
         if shared.method == "chat":
             print("AI: {response}".format(response=response))
@@ -41,5 +41,6 @@ class Chat(Action):
         
         # Clear query result for next iteration in interactive mode
         shared.query_result = None
+        shared.fallback_message = None
         
         return shared

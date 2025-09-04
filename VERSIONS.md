@@ -1,6 +1,32 @@
 # Version History
 
-## v0.1.1 (Current)
+## v0.1.2 (Current)
+
+### New Features
+- **Error Handling & Retry System**: Automatic SQL error detection and retry with up to 2 attempts
+- **Fallback Mechanism**: Graceful degradation to conversational help when retries fail
+- **Guided Questions**: Smart routing to help users discover what they can ask about their data
+- **Enhanced Organize Action**: Three-way routing (query/guide/default) with explicit examples
+- **User Assistance**: Dedicated GuideQuestion action for data exploration suggestions
+
+### Technical Improvements
+- Enhanced organize.md prompt with clear routing examples
+- New guide_question.md prompt for generating helpful suggestions
+- Improved error context passing between actions
+- Better user experience for failed queries
+
+### Phase 2 Complete ✅
+- Robust error handling across the pipeline
+- User-friendly guidance system
+- Reliable fallback mechanisms
+- Enhanced user experience for data exploration
+
+### Next: Phase 3 Planning
+- Session logging and audit trails
+- Query execution history
+- Performance monitoring
+
+## v0.1.1
 
 ### New Features
 - **BroInsight Wrapper Class**: Added user-friendly interface with two interaction modes

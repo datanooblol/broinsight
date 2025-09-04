@@ -5,6 +5,7 @@ from .actions.chat import Chat
 from .actions.generate_sql import GenerateSQL
 from .actions.select_metadata import SelectMetadata
 from .actions.organize import Organize
+from .actions.guide_question import GuideQuestion 
 from brollm import BaseLLM
 from broprompt import Prompt
 
@@ -14,6 +15,10 @@ def get_flow(model:BaseLLM):
     user_input_action = UserInput()
     organize_action = Organize(
         system_prompt=Prompt.from_markdown("broinsight/prompt_hub/organize.md").str,
+        model=model
+    )
+    guide_question_action = GuideQuestion(
+        system_prompt=Prompt.from_markdown("broinsight/prompt_hub/guide_question.md").str,
         model=model
     )
     select_metadata_action = SelectMetadata(
@@ -31,9 +36,12 @@ def get_flow(model:BaseLLM):
     )
     start_action >> user_input_action
     user_input_action >> organize_action
+    organize_action -"guide">> guide_question_action
+    guide_question_action >> user_input_action
     organize_action -"select_metadata">> select_metadata_action
     select_metadata_action >> generate_sql_action
     generate_sql_action >> retrieve_action
+    retrieve_action -"generate_sql">> generate_sql_action
     retrieve_action >> chat_action
     organize_action >> chat_action
     chat_action >> user_input_action

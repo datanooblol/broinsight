@@ -9,7 +9,8 @@ class BroInsight:
         self.model = model
         self.metadata_loader = metadata_loader or MetadataLoader()
         self.db = db
-        self.flow = get_flow(model)
+        # self.flow = get_flow(model)
+        self.model = model
     
     def ask(self, question: str, **kwargs) -> List[Dict[str, Any]]:
         """One-shot Q&A mode - ask a question and get the conversation messages back"""
@@ -22,7 +23,9 @@ class BroInsight:
         )
         
         # Run the flow with pre-populated question
-        self.flow.run(shared)
+        # self.flow.run(shared)
+        flow = get_flow(self.model)
+        flow.run(shared)
         response = shared.messages[-1]['content'][0]['text']
         print("AI: {response}".format(response=response))
         # Return the conversation messages
@@ -38,5 +41,7 @@ class BroInsight:
         )
         
         # Run the flow in interactive mode
-        self.flow.run(shared)
+        # self.flow.run(shared)
+        flow = get_flow(self.model)
+        flow.run(shared)
         return shared

@@ -34,11 +34,11 @@ BroInsight uses a flow-based architecture to process your questions:
 - ✅ Conversational data insights
 - ✅ Happy path functionality working
 
-### Phase 2: Reliability & Debugging (Current)
-- 📋 Error handling for each pipeline stage
-- 📋 Graceful failure recovery
-- 📋 User-friendly error messages
-- 📋 Guided questions based on metadata (chat mode)
+### Phase 2: Reliability & User Guidance ✅ (v0.1.2)
+- ✅ SQL error retry mechanism with fallback
+- ✅ Graceful failure recovery and user-friendly error messages
+- ✅ Guided questions and data exploration assistance
+- ✅ Enhanced routing with help/suggestion system
 - 📋 Session logging with DuckDB
 
 ### Phase 3: Transparency & Guidance
