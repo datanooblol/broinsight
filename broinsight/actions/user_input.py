@@ -6,7 +6,10 @@ class UserInput(Action):
             self.next_action = "exit"
 
     def run(self, shared:Shared):
-        user_input = input("YOU: ")
-        self.logic(user_input)
-        shared.user_input = user_input
+        # Check if user_input is already set (one-shot mode)
+        if shared.method == "chat":
+            user_input = input("YOU: ")
+            shared.user_input = user_input
+        
+        self.logic(shared.user_input)
         return shared

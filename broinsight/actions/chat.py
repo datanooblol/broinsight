@@ -21,12 +21,25 @@ class Chat(Action):
     def run(self, shared:Shared):
         messages = shared.messages
         prompt = self.create_prompt(shared)
-        messages.append(self.model.UserMessage(text=prompt))
+        
+        # Create temporary messages for LLM call
+        temp_messages = messages + [self.model.UserMessage(text=prompt)]
+        
         response = self.model.run(
             system_prompt=self.system_prompt,
-            messages=messages
+            messages=temp_messages
         )
+        
+        # Add the actual conversation to shared messages
+        messages.append(self.model.UserMessage(text=shared.user_input))
         messages.append(self.model.AIMessage(text=response))
-        print("AI: {response}".format(response=response))
-        shared.query_result = pd.DataFrame()
+        
+        if shared.method == "chat":
+            print("AI: {response}".format(response=response))
+        if shared.method == "ask":
+            shared.user_input = "/exit"
+        
+        # Clear query result for next iteration in interactive mode
+        shared.query_result = None
+        
         return shared

@@ -18,9 +18,11 @@ class SelectMetadata(Action):
         metadata = shared.metadata_loader.construct_prompt_context()
         user_input = shared.user_input
         prompt = "METADATAS:\n\n{metadata}\n\nUSER_INPUT:\n\n{user_input}\n\n".format(metadata=metadata, user_input=user_input)
+        messages = shared.messages.copy()
+        messages.append(self.model.UserMessage(text=prompt))
         response = self.model.run(
             system_prompt=self.system_prompt,
-            messages=[self.model.UserMessage(text=prompt)]
+            messages=messages
         )
         tables = self.parse_response(response)
         shared.selected_metadata = []

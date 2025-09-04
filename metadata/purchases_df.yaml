@@ -1,25 +1,22 @@
-description: "**Table: Purchases and Returns**\n\nThis table records every customer\
-  \ order and whether the order was returned. It includes the date and time of the\
-  \ sale, the product bought, the quantity, the price, any discount applied, the total\
-  \ amount paid, the channel through which the purchase was made (online, store, mobile),\
-  \ and the customer who made the purchase.  \n\n**Primary purpose / use cases** \
-  \ \n- **Sales performance** \u2013 view total revenue, average sale size, and top\u2011\
-  selling products.  \n- **Channel analysis** \u2013 compare how many sales occur\
-  \ in each channel and how channel mix affects revenue.  \n- **Return monitoring**\
-  \ \u2013 calculate return rates, identify high\u2011return products, and assess\
-  \ the impact of returns on cash flow.  \n- **Discount effectiveness** \u2013 see\
-  \ how discounts influence the quantity sold and the final revenue.  \n- **Revenue\
-  \ forecasting** \u2013 feed into budgeting and planning by linking past sales, discounts,\
-  \ and returns to future projections.  \n\n**Key relationships**  \n- Each record\
-  \ links to a **customer** (customer_id) so it can be merged with customer profiles\
-  \ for segmentation.  \n- Each record references a **product** (product_id) for inventory\
-  \ and product\u2011level analysis.  \n- The **channel** field ties sales to marketing\
-  \ and operations, helping to evaluate channel strategies.  \n\n**Typical users**\
-  \  \n- **Sales & marketing teams** \u2013 to understand channel performance and\
-  \ discount impact.  \n- **Finance & accounting** \u2013 to track revenue, returns,\
-  \ and discount costs.  \n- **Operations & inventory managers** \u2013 to anticipate\
-  \ demand and manage stock levels.  \n- **Data analysts & business intelligence**\
-  \ \u2013 to build dashboards, run trend analyses, and support strategic decisions."
+description: "**Table: Purchases and Returns**\n\nThis table logs every customer order,\
+  \ including the product bought, quantity, price, any discount, the final amount\
+  \ paid, the sales channel (online, store, or mobile), the customer who made the\
+  \ purchase, and whether the order was returned.\n\n**Why it matters**\n\n- **Track\
+  \ sales performance** \u2013 see total revenue, average sale size, and which products\
+  \ sell best.  \n- **Compare channels** \u2013 understand how online, in\u2011store,\
+  \ and mobile sales differ and how each channel contributes to revenue.  \n- **Monitor\
+  \ returns** \u2013 calculate return rates, spot high\u2011return products, and assess\
+  \ the cash\u2011flow impact of returns.  \n- **Evaluate discounts** \u2013 measure\
+  \ how discounts affect quantity sold and net revenue.  \n- **Support forecasting**\
+  \ \u2013 feed past sales, discounts, and return data into budgeting and revenue\
+  \ projections.\n\n**Key connections**\n\n- *Customer* \u2013 links each transaction\
+  \ to a customer profile for segmentation.  \n- *Product* \u2013 ties sales to inventory\
+  \ and product\u2011level analysis.  \n- *Channel* \u2013 connects sales to marketing\
+  \ and operations decisions.\n\n**Who uses it**\n\n- Sales & marketing teams for\
+  \ channel and discount analysis.  \n- Finance & accounting to track revenue, returns,\
+  \ and discount costs.  \n- Operations & inventory managers to forecast demand and\
+  \ manage stock.  \n- Data analysts and business intelligence personnel building\
+  \ dashboards and trend reports."
 fields:
   channel:
     data_type: VARCHAR

@@ -1,6 +1,6 @@
 from broflow import Action
 from pydantic import BaseModel, Field
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Literal
 from brollm import BaseLLM
 from broinsight.metadata.metadata_loader import MetadataLoader
 
@@ -12,3 +12,4 @@ class Shared(BaseModel):
     query_result:Any = Field(description="Query result", default=None)
     messages:List[Dict[str, Any]] = Field(description="Messages", default_factory=list)
     db: Any = Field(description="Connection", default=None)
+    method: Literal["ask", "chat"] = Field(description="Method", default="ask")

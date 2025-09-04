@@ -1,21 +1,16 @@
-description: "\nThe \u201Cproducts_df\u201D table is a product catalog that holds\
-  \ the core information businesses need about every item they sell.  \nIt lists each\
-  \ product\u2019s brand, category, cost, retail price, customer rating and how many\
-  \ units are in stock.  \n\n**Primary purpose**  \n- Keep a single, up\u2011to\u2011\
-  date view of what the company offers and how it\u2019s priced.  \n- Provide the\
-  \ data needed for pricing decisions, inventory management, and sales forecasting.\
-  \  \n\n**Typical use cases**  \n- Merchandisers set price points and discount plans.\
-  \  \n- Supply\u2011chain planners monitor stock levels to trigger reorder signals.\
-  \  \n- Finance analysts calculate margin (price \u2013 cost) and profitability by\
-  \ brand or category.  \n- Marketing teams identify high\u2011rating, high\u2011\
-  margin products for promotion.  \n\n**Key relationships**  \n- Linked to sales orders\
-  \ and customer transactions (which product was sold, at what price).  \n- Connected\
-  \ to supplier information for cost updates and new product introductions.  \n- Tied\
-  \ to inventory records that track actual warehouse levels and replenishment.  \n\
-  \n**Who uses it**  \n- Merchandising and product managers for assortment and pricing\
-  \ strategy.  \n- Supply\u2011chain and inventory specialists for stock control.\
-  \  \n- Finance and analytics teams for margin and profitability analysis.  \n- Marketing\
-  \ for targeting high\u2011rating, high\u2011margin items.\n"
+description: "\nThe \u201Cproducts_df\u201D table is a master list of every item the\
+  \ company sells.  \nIt records each product\u2019s brand, category, cost, price,\
+  \ customer rating, and how many units are currently in stock.\n\n**Why it matters**\
+  \  \n- Keeps the product catalog up\u2011to\u2011date for pricing, inventory, and\
+  \ sales planning.  \n- Provides the data needed for margin calculations, stock\u2011\
+  reorder decisions, and marketing targeting.\n\n**Typical users and uses**  \n- Merchandisers\
+  \ set prices and promotions based on cost, price, and rating.  \n- Supply\u2011\
+  chain planners monitor stock levels and trigger replenishment.  \n- Finance teams\
+  \ compute profitability by brand or category.  \n- Marketing identifies highly rated,\
+  \ high\u2011margin products for campaigns.\n\n**Key business links**  \n- Shows\
+  \ which product was sold in each order.  \n- Connects to supplier information for\
+  \ cost updates.  \n- Relates to warehouse inventory records to track actual stock\
+  \ levels.\n"
 fields:
   brand:
     data_type: VARCHAR
