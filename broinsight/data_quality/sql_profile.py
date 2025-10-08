@@ -12,7 +12,7 @@ def _extract_data_type(column_type: str) -> str:
 def sql_table_profile(conn, table_name: str) -> dict:
     """Generate dataset-level data quality profile using SQL."""
     # Get table dimensions
-    rows = conn.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
+    rows = conn.execute(f"SELECT COUNT(1) FROM {table_name}").fetchone()[0]
     
     # Get column count
     columns = len(conn.execute(f"DESCRIBE {table_name}").fetchall())
