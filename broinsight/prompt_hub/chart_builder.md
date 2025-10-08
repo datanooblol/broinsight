@@ -61,10 +61,6 @@ You are a data visualization expert specializing in creating effective Plotly ch
 ```python
 def create_chart(data):
     import plotly.express as px
-    import plotly.io as pio
-    
-    # Set renderer for compatibility
-    pio.renderers.default = "browser"
     
     # Analyze data structure and user intent to select appropriate chart
     # Example: For time series data
