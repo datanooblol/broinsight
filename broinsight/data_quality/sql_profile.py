@@ -53,7 +53,7 @@ def sql_field_profile(conn, table_name: str, top_n: int = 5) -> dict:
     """Generate comprehensive data quality profile for each field using SQL."""
     # Get schema
     schema = conn.execute(f"DESCRIBE {table_name}").fetchall()
-    total_rows = conn.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()[0]
+    total_rows = conn.execute(f"SELECT COUNT(1) FROM {table_name}").fetchone()[0]
     
     results = {}
     
