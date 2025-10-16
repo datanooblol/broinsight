@@ -2,27 +2,22 @@ import boto3
 import time
 from pydantic import BaseModel
 from typing import Optional, Any
-# aws_config = dict(
-#     aws_access_key_id=credentials.access_key,
-#     aws_secret_access_key=credentials.secret_key,
-#     aws_session_token=credentials.token or None,
-#     region_name='us-west-2'    
-# )
+
 class AWSConfig(BaseModel):
     aws_access_key_id:str
     aws_secret_access_key:str
     aws_session_token:Optional[str] = None
     region_name:str = 'us-west-2'
 
-class BaseLLM:
-    def __init__(self, *args, **kwargs): pass
-    def UserMessage(self, text): pass
-    def AIMessage(self, text): pass
-    def SystemMessage(self, text): pass
-    def OutputMessage(self, text): pass
-    def run(self, system_prompt, messages): pass
+# class BaseLLM:
+#     def __init__(self, *args, **kwargs): pass
+#     def UserMessage(self, text): pass
+#     def AIMessage(self, text): pass
+#     def SystemMessage(self, text): pass
+#     def OutputMessage(self, text): pass
+#     def run(self, system_prompt, messages): pass
 
-class BedrockOpenAI(BaseLLM):
+class BedrockOpenAI:
     def __init__(self, model_id, aws_configs, temperature=0.1):
         self.model_id = model_id
         self.aws_configs = self._validate_config(aws_configs)

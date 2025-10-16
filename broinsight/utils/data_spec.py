@@ -29,7 +29,7 @@ class DataQualityAssessment(BaseModel):
     field_assessments: List[FieldQualityAssessment] = []
     overall_quality: Optional[str] = None  # poor, fair, good
     total_issues: int = 0
-    assessment_summary: Optional[str] = None  # LLM-generated summary
+    # assessment_summary: Optional[str] = None  # LLM-generated summary
 
 class FieldSpec(BaseModel):
     field_name: str

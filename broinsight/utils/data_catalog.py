@@ -2,58 +2,46 @@ import duckdb
 import pandas as pd
 from typing import Dict, List, Optional, Union
 from broinsight.data_quality.sql_profile import sql_table_profile, sql_field_profile
-from broinsight.data_quality.criteria import assess_data_quality
-from broinsight.data_quality.create_profile import format_profile
-
-
-# class DataQualityFormatter:
-#     """Formats data quality profiles for LLM consumption"""
-    
-#     @staticmethod
-#     def format_for_llm(table_profile: Dict, field_profile: Dict) -> str:
-#         """Format profiles into LLM-ready string"""
-#         # Assess data quality
-#         dq_summary = assess_data_quality(field_profile)
-        
-#         # Create combined profile structure
-#         profile = {
-#             'dataset_summary': table_profile,
-#             'fields': {
-#                 k: {
-#                     'profile': v, 
-#                     'quality': dq_summary[k]['summary']
-#                 } for k, v in field_profile.items()
-#             }
-#         }
-        
-#         # Format for LLM
-#         return format_profile(profile)
+# from broinsight.data_quality.criteria import assess_data_quality
+# from broinsight.data_quality.create_profile import format_profile
+from broinsight.utils.data_spec import Metadata, TableSpec, create_field_specs_from_profile, create_data_quality_assessment
+from broinsight.experiment.bedrock import AWSConfig
 
 class DataCatalog:
-    def __init__(self, s3_config=None):
+    def __init__(self, aws_configs:Optional[AWSConfig]=None):
         self._conn = duckdb.connect()
         self._tables = {}
         self._relationships = []  # Store table relationships
-        if s3_config:
-            self._setup_s3(**s3_config)
-    
-    def _setup_s3(self, key_id=None, secret=None, region='ap-southeast-1', session_token=None, endpoint=None):
+        if aws_configs:
+            self._setup_s3(**self._validate_config(aws_configs))
+
+    def _validate_config(self, aws_configs):
+        """Validate and convert AWSConfig to dictionary"""
+        if isinstance(aws_configs, AWSConfig):
+            return aws_configs.model_dump()
+        elif isinstance(aws_configs, dict):
+            # Validate dict has required fields
+            AWSConfig(**aws_configs)  # This will raise ValidationError if invalid
+            return aws_configs
+        else:
+            raise TypeError("aws_configs must be AWSConfig instance or dict")
+
+    def _setup_s3(self, aws_access_key_id=None, aws_secret_access_key=None, region_name='ap-southeast-1', aws_session_token=None):
         """Setup S3 connection using your existing logic"""
+
         self._conn.execute("INSTALL httpfs")
         self._conn.execute("LOAD httpfs")
         
-        if key_id and secret:
+        if aws_access_key_id and aws_secret_access_key:
             secret_sql = f"""
             CREATE OR REPLACE SECRET s3_secret (
                 TYPE s3,
                 PROVIDER config,
-                KEY_ID '{key_id}',
-                SECRET '{secret}',
-                REGION '{region}'"""
-            if session_token:
-                secret_sql += f",\n                SESSION_TOKEN '{session_token}'"
-            if endpoint:
-                secret_sql += f",\n                ENDPOINT '{endpoint}'"
+                KEY_ID '{aws_access_key_id}',
+                SECRET '{aws_secret_access_key}',
+                REGION '{region_name}'"""
+            if aws_session_token:
+                secret_sql += f",\n                SESSION_TOKEN '{aws_session_token}'"
             secret_sql += "\n            )"
             self._conn.execute(secret_sql)
         else:
@@ -107,7 +95,6 @@ class DataCatalog:
     
     def profile_tables(self, tables: List[str]):
         """Generate complete Metadata objects for specified tables"""
-        from broinsight.utils.data_spec import Metadata, TableSpec, create_field_specs_from_profile, create_data_quality_assessment
         
         for table_name in tables:
             if table_name not in self._tables:
@@ -349,49 +336,3 @@ TOTAL ISSUES: {metadata.data_quality.total_issues}
             result += "\n"
         
         return result.strip()
-    
-    # def get_table_profile(self, table_name: str) -> Dict:
-    #     """Get table-level data quality profile"""
-    #     if table_name not in self._tables:
-    #         raise ValueError(f"Table '{table_name}' not found")
-    #     return sql_table_profile(self._conn, table_name)
-    
-    # def get_field_profile(self, table_name: str, top_n: int = 5) -> Dict:
-    #     """Get field-level data quality profile"""
-    #     if table_name not in self._tables:
-    #         raise ValueError(f"Table '{table_name}' not found")
-    #     return sql_field_profile(self._conn, table_name, top_n)
-    
-    # def get_all_profiles(self) -> Dict:
-    #     """Get comprehensive profiles for all tables"""
-    #     profiles = {}
-    #     for table_name in self.list_tables():
-    #         profiles[table_name] = {
-    #             'table_profile': self.get_table_profile(table_name),
-    #             'field_profile': self.get_field_profile(table_name)
-    #         }
-    #     return profiles
-    
-    # def get_metadata(self, table_name: str) -> Optional[Dict]:
-    #     """Get metadata for a specific table"""
-    #     if table_name not in self._tables:
-    #         raise ValueError(f"Table '{table_name}' not found")
-    #     return self._tables[table_name].get('metadata')
-    
-    # def get_formatted_profile(self, table_name: str) -> str:
-    #     """Get LLM-ready formatted profile for a table"""
-    #     if table_name not in self._tables:
-    #         raise ValueError(f"Table '{table_name}' not found")
-        
-    #     table_profile = self.get_table_profile(table_name)
-    #     field_profile = self.get_field_profile(table_name)
-        
-    #     return DataQualityFormatter.format_for_llm(table_profile, field_profile)
-    
-    # @classmethod
-    # def from_pandas(cls, dataframes: Dict[str, pd.DataFrame], s3_config=None):
-    #     """Factory method to create DataCatalog from pandas DataFrames"""
-    #     catalog = cls(s3_config=s3_config)
-    #     for name, df in dataframes.items():
-    #         catalog.create_table(name, df)
-    #     return catalog
