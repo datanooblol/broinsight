@@ -81,7 +81,7 @@ def format_profile(profile_dict: dict) -> str:
         
         # Profile section
         profile = field_data["profile"]
-        lines.append(f"**Type:** {profile['data_types']}")
+        lines.append(f"**Type:** {profile['data_type']}")
         lines.append(f"**Missing:** {profile['missing_values']} ({profile['missing_values_pct']:.1%})")
         lines.append(f"**Unique:** {profile['unique_values']} ({profile['unique_values_pct']:.1%})")
         
@@ -97,7 +97,7 @@ def format_profile(profile_dict: dict) -> str:
         # Statistics (condensed)
         stats = profile.get("statistics", {})
         if stats:
-            if profile["data_types"] in ["integer", "float"]:
+            if profile["data_type"] in ["integer", "float"]:
                 lines.append(f"**Stats:** min={stats.get('min')}, max={stats.get('max')}, mean={stats.get('mean')}, skew={stats.get('skew')}")
             else:
                 lines.append(f"**Stats:** mode={stats.get('mode')}, avg_length={stats.get('avg_length')}")

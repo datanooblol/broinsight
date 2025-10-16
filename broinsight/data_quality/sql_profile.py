@@ -149,7 +149,8 @@ def sql_field_profile(conn, table_name: str, top_n: int = 5) -> dict:
         
         # Compile results
         results[col_name] = {
-            "data_types": col_type,
+            "data_type": col_type,
+            # "data_types": col_type,
             "missing_values": basic_metrics[0],
             "missing_values_pct": round(basic_metrics[0] / total_rows, 2) if total_rows > 0 else 0,
             "unique_values": basic_metrics[1],
