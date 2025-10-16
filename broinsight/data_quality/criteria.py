@@ -9,7 +9,7 @@ def assess_field_quality(field_name: str, field_data: dict) -> dict:
         dict: Assessment summary with issues categorized by severity.
     """
     issues = []
-    data_type = field_data["data_types"]
+    data_type = field_data["data_type"]
     stats = field_data.get("statistics", {})
     
     # Missing values check (three-tier system)
