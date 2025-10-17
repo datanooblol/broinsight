@@ -7,7 +7,7 @@ def _extract_data_type(x):
         x (str): Pandas dtype as string (e.g., 'object', 'int64', 'float32').
         
     Returns:
-        str: Simplified data type ('string', 'integer', 'float', or 'unknown').
+        str: Simplified data type ('string', 'integer', 'float', 'datetime', or 'unknown').
     """
     if x=="object":
         return "string"
@@ -17,6 +17,8 @@ def _extract_data_type(x):
         return "integer"
     if x.startswith("float"):
         return "float"
+    if x.startswith("datetime") or x.startswith("timestamp"):
+        return "datetime"
     else:
         return "unknown"
 
@@ -89,12 +91,35 @@ def _extract_string_statistics(series: pd.Series):
     return proxy
 
 
+def _extract_datetime_statistics(series: pd.Series):
+    """Calculate statistics specific to datetime data.
+    
+    Args:
+        series (pd.Series): Datetime pandas Series.
+        
+    Returns:
+        dict: Dictionary containing datetime-specific statistics.
+    """
+    try:
+        date_range_days = (series.max() - series.min()).days if series.max() and series.min() else 0
+        proxy = pd.Series({
+            "min_date": str(series.min()),
+            "max_date": str(series.max()),
+            "date_range_days": date_range_days,
+            "unique_days": series.dt.date.nunique(),
+            "unique_months": series.dt.to_period('M').nunique(),
+            "unique_years": series.dt.year.nunique()
+        })
+        return proxy.to_dict()
+    except:
+        return {}
+
 def _extract_statistics(series: pd.Series, dtype: str):
     """Extract appropriate statistics based on data type.
     
     Args:
         series (pd.Series): Data series to analyze.
-        dtype (str): Data type category ('string', 'integer', 'float', etc.).
+        dtype (str): Data type category ('string', 'integer', 'float', 'datetime', etc.).
         
     Returns:
         dict: Statistics dictionary appropriate for the data type.
@@ -103,6 +128,8 @@ def _extract_statistics(series: pd.Series, dtype: str):
         return _extract_string_statistics(series)
     if dtype in ["integer", "float"]:
         return _extract_numeric_statistics(series)
+    if dtype == "datetime":
+        return _extract_datetime_statistics(series)
     else:
         return {}
 

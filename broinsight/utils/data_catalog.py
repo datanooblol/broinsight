@@ -235,6 +235,13 @@ TOTAL ISSUES: {metadata.data_quality.total_issues}
                         if 'mean' in stats:
                             result += f", Average: {stats['mean']:.2f}"
                         result += "\n"
+                elif field.data_type == 'datetime' and field.statistics:
+                    stats = field.statistics
+                    if 'min_date' in stats and 'max_date' in stats:
+                        result += f"  Range: {stats['min_date']} to {stats['max_date']}"
+                        if 'unique_days' in stats:
+                            result += f", {stats['unique_days']} unique days"
+                        result += "\n"
                 elif field.data_type == 'string' and field.most_frequent:
                     # Show top values for categorical fields
                     top_values = list(field.most_frequent.items())[:3]
@@ -326,6 +333,13 @@ TOTAL ISSUES: {metadata.data_quality.total_issues}
                         result += f"  Range: {stats['min']} - {stats['max']}"
                         if 'mean' in stats:
                             result += f", Average: {stats['mean']:.2f}"
+                        result += "\n"
+                elif field.data_type == 'datetime' and field.statistics:
+                    stats = field.statistics
+                    if 'min_date' in stats and 'max_date' in stats:
+                        result += f"  Range: {stats['min_date']} to {stats['max_date']}"
+                        if 'unique_days' in stats:
+                            result += f", {stats['unique_days']} unique days"
                         result += "\n"
                 elif field.data_type == 'string' and field.most_frequent:
                     # Show example values for categorical fields

@@ -72,17 +72,34 @@ def create_field_specs_from_profile(field_profile: dict, field_descriptions: Opt
     
     for field_name, profile in field_profile.items():
         description = desc_dict.get(field_name)
-        field_spec = FieldSpec(
-            field_name=field_name,
-            data_type=profile['data_type'],
-            missing_values=profile['missing_values'],
-            missing_values_pct=profile['missing_values_pct'],
-            unique_values=profile['unique_values'],
-            unique_values_pct=profile['unique_values_pct'],
-            most_frequent=profile['most_frequent'],
-            statistics=profile.get('statistics'),
-            description=description
-        )
+        
+        # Handle error fields gracefully
+        if 'error' in profile:
+            field_spec = FieldSpec(
+                field_name=field_name,
+                data_type=profile['data_type'],
+                missing_values=0,
+                missing_values_pct=0.0,
+                unique_values=0,
+                unique_values_pct=0.0,
+                most_frequent={},
+                statistics={},
+                description=f"Profiling error: {profile['error']}"
+            )
+        else:
+            # Normal field processing
+            field_spec = FieldSpec(
+                field_name=field_name,
+                data_type=profile['data_type'],
+                missing_values=profile['missing_values'],
+                missing_values_pct=profile['missing_values_pct'],
+                unique_values=profile['unique_values'],
+                unique_values_pct=profile['unique_values_pct'],
+                most_frequent=profile['most_frequent'],
+                statistics=profile.get('statistics'),
+                description=description
+            )
+        
         field_specs.append(field_spec)
     
     return field_specs
