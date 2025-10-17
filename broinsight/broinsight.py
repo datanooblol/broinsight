@@ -1,5 +1,10 @@
 from typing import Any, Dict, Optional
 from broprompt import Prompt
+import os
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 
 class BroInsight:
     """
@@ -30,6 +35,16 @@ class BroInsight:
         """
         self.model = model
     
+    def _get_prompt_path(self, filename: str) -> str:
+        """Get the full path to a prompt file, works for both dev and installed package"""
+        try:
+            # Try importlib.resources first (for installed package)
+            prompt_files = files('broinsight.prompt_hub')
+            return str(prompt_files / filename)
+        except:
+            # Fallback to relative path (for development)
+            return os.path.join(os.path.dirname(__file__), "prompt_hub", filename)
+    
     def assess_data_quality(self, context: str, message: str):
         """
         Assess data quality and provide recommendations.
@@ -41,7 +56,8 @@ class BroInsight:
         Returns:
             LLM response with data quality assessment and recommendations
         """
-        prompt = Prompt.from_markdown("./prompt_hub/dq_suggestion.md")
+        prompt_path = self._get_prompt_path("dq_suggestion.md")
+        prompt = Prompt.from_markdown(prompt_path)
         user_input = f"PROFILE:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
@@ -60,7 +76,8 @@ class BroInsight:
         Returns:
             LLM response with suggested questions organized by business topics
         """
-        prompt = Prompt.from_markdown("./prompt_hub/guide_question.md")
+        prompt_path = self._get_prompt_path("guide_question.md")
+        prompt = Prompt.from_markdown(prompt_path)
         user_input = f"METADATA:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
@@ -79,7 +96,8 @@ class BroInsight:
         Returns:
             LLM response with SQL query
         """
-        prompt = Prompt.from_markdown("./prompt_hub/generate_sql.md")
+        prompt_path = self._get_prompt_path("generate_sql.md")
+        prompt = Prompt.from_markdown(prompt_path)
         user_input = f"METADATA:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
@@ -89,7 +107,8 @@ class BroInsight:
 
     def create_chart(self, query_result, message):
         """Generate Plotly visualization using LLM-generated code"""
-        prompt = Prompt.from_markdown("./prompt_hub/chart_builder.md")
+        prompt_path = self._get_prompt_path("chart_builder.md")
+        prompt = Prompt.from_markdown(prompt_path)
         user_input = f"DATA:\n\n{query_result.to_string()}\n\nUSER_INPUT:\n\n{message}\n\n"
         response = self.model.run(
             system_prompt=prompt.str,
@@ -131,7 +150,8 @@ class BroInsight:
         Returns:
             LLM response with business insights and interpretations
         """
-        prompt = Prompt.from_markdown("./prompt_hub/chat.md")
+        prompt_path = self._get_prompt_path("chat.md")
+        prompt = Prompt.from_markdown(prompt_path)
         user_input = f"CONTEXT:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
