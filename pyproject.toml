@@ -1,6 +1,6 @@
 [project]
 name = "broinsight"
-version = "0.1.5"
+version = "0.1.6"
 description = "If you don't know what to do with your data, I got you, Bro!"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -29,7 +29,8 @@ packages = [
     "broinsight.metadata", 
     "broinsight.utils", 
     "broinsight.data_quality", 
-    "broinsight.experiment"
+    "broinsight.experiment",
+    "broinsight.prompt_hub"
 ]
 
 [tool.setuptools.package-data]
