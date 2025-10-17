@@ -41,7 +41,7 @@ class BroInsight:
         Returns:
             LLM response with data quality assessment and recommendations
         """
-        prompt = Prompt.from_markdown("broinsight/prompt_hub/dq_suggestion.md")
+        prompt = Prompt.from_markdown("./prompt_hub/dq_suggestion.md")
         user_input = f"PROFILE:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
@@ -60,7 +60,7 @@ class BroInsight:
         Returns:
             LLM response with suggested questions organized by business topics
         """
-        prompt = Prompt.from_markdown("broinsight/prompt_hub/guide_question.md")
+        prompt = Prompt.from_markdown("./prompt_hub/guide_question.md")
         user_input = f"METADATA:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
@@ -79,7 +79,7 @@ class BroInsight:
         Returns:
             LLM response with SQL query
         """
-        prompt = Prompt.from_markdown("broinsight/prompt_hub/generate_sql.md")
+        prompt = Prompt.from_markdown("./prompt_hub/generate_sql.md")
         user_input = f"METADATA:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
@@ -89,7 +89,7 @@ class BroInsight:
 
     def create_chart(self, query_result, message):
         """Generate Plotly visualization using LLM-generated code"""
-        prompt = Prompt.from_markdown("broinsight/prompt_hub/chart_builder.md")
+        prompt = Prompt.from_markdown("./prompt_hub/chart_builder.md")
         user_input = f"DATA:\n\n{query_result.to_string()}\n\nUSER_INPUT:\n\n{message}\n\n"
         response = self.model.run(
             system_prompt=prompt.str,
@@ -131,7 +131,7 @@ class BroInsight:
         Returns:
             LLM response with business insights and interpretations
         """
-        prompt = Prompt.from_markdown("broinsight/prompt_hub/chat.md")
+        prompt = Prompt.from_markdown("./prompt_hub/chat.md")
         user_input = f"CONTEXT:\n\n{context}\n\nUSER_INPUT:\n\n{message}\n\n"
         
         return self.model.run(
