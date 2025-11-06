@@ -25,6 +25,8 @@ class ModelResponse(BaseModel):
 
 def UserMessage(content:str)->dict:
     return dict(role='user', content=content)
+def AIMessage(content:str)->dict:
+    return dict(role='assistant', content=content)
 
 class BaseLLM(ABC):
     def __init__(self, model_id,):
