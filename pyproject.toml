@@ -28,15 +28,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = [
-    "broinsight", 
-    "broinsight.actions", 
-    "broinsight.metadata", 
-    "broinsight.utils", 
-    "broinsight.data_quality", 
-    "broinsight.experiment",
-    "broinsight.prompt_hub"
-]
+packages = {find = {where = ["."], include = ["broinsight*"]}}
 
 [tool.setuptools.package-data]
 "broinsight.prompt_hub" = ["*.md"]

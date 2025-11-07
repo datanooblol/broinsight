@@ -48,6 +48,12 @@ def parse_google_docstring(func) -> Dict:
     lines = docstring.strip().split('\n')
     description = lines[0].strip()
     
+    # Extract category
+    category_match = re.search(r'Category:\s*(.+)', docstring)
+    category = "general"
+    if category_match:
+        category = category_match.group(1).strip()
+    
     # Extract keywords
     keywords_match = re.search(r'Keywords:\s*(.+)', docstring)
     keywords = []
@@ -75,6 +81,7 @@ def parse_google_docstring(func) -> Dict:
     
     return {
         "description": description,
+        "category": category,
         "keywords": keywords,
         "parameters": parameters,
         "returns": return_type
@@ -89,6 +96,7 @@ class ToolBox:
             "function": func,
             "name": name,
             "description": metadata.get("description", ""),
+            "category": metadata.get("category", "general"),
             "keywords": metadata.get("keywords", []),
             "parameters": metadata.get("parameters", {}),
             "returns": metadata.get("returns", ""),
