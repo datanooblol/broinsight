@@ -37,3 +37,4 @@ def to_mermaid_with_conditions(transitions, direction:Literal["LR", "TB"]="LR"):
 
 def get_state_str(state):
     return state.value.upper() if isinstance(state, Enum) else state.upper()
+    # return state

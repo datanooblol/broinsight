@@ -19,11 +19,11 @@ class SimpleStateRegistry:
 
     @classmethod
     def register(cls, state_name, state_class):
-        state_name = get_state_str(state_name)
-        if state_name not in cls._states:
-            cls._states[state_name] = state_class
+        state_name_str = get_state_str(state_name)
+        if state_name_str not in cls._states:
+            cls._states[state_name_str] = state_class
         else:
-            print(f"Already registered: {state_name}")
+            print(f"Already registered: {state_name_str}")
 
     @classmethod
     def get(cls, state_name:Any)->BaseSimpleState:
@@ -60,7 +60,7 @@ def simple_state(state_name):
 class SimpleStateMachine:
     def __init__(self, start_state, end_state):
         self.start_state = start_state
-        self.end_state = end_state
+        self.end_state = get_state_str(end_state)
     
     def run(self, context):
         current_state = self.start_state

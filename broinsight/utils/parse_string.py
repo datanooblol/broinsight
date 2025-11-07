@@ -5,3 +5,6 @@ def parse_blockcode(code_str:str, language:str)->str:
 
 def parse_sql(sql_str:str)->str:
     return parse_blockcode(sql_str, "sql")
+
+def parse_json(sql_str:str)->str:
+    return parse_blockcode(sql_str, "json")

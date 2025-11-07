@@ -28,3 +28,7 @@ class PromptHub:
     @property
     def quick_chat(self):
         return _run(filename="quick_chat.md")
+    
+    @property
+    def router(self):
+        return _run(filename="router.md")
