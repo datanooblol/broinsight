@@ -1,4 +1,8 @@
 from broinsight.statemachines.utils import get_state_str, get_return_values_ast
+from pathlib import Path
+from typing import Optional, Literal
+from .utils import to_mermaid_with_conditions
+
 class StateGroup:
     def __init__(self, name: str = "default"):
         self.name = name
@@ -70,7 +74,17 @@ class CompositeStateGroup:
             returns = get_return_values_ast(v.next_state)
             transitions[k] = returns
         return transitions
-    
+
+    def to_mermaid(self, save_path: Optional[str] = None, direction: Literal["LR", "TB"] = "TB"):
+        transitions = self.state_graph()
+        mermaid_str = to_mermaid_with_conditions(transitions, direction)
+        if save_path:
+            path = Path(save_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("```mermaid\n{mermaid_str}\n```".format(mermaid_str=mermaid_str))
+        return mermaid_str
+
+
     def create_machine(self, start_state, end_state):
         return GroupStateMachine(self, start_state, end_state)
 
