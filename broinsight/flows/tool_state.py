@@ -44,7 +44,7 @@ class ToolLogicState:
         print(tools)
         user_input = context.user_input
         scores = calculate_similarity(user_input, tools)
-        logic = any(scores>0.1)
+        logic = any(scores>0.3)
         print(logic, scores)
         context.tool.is_tool = logic
         return self.next_state(logic)

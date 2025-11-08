@@ -20,10 +20,10 @@ def parse_google_docstring(func) -> Dict:
         category = category_match.group(1).strip()
     
     # Extract keywords
-    keywords_match = re.search(r'Keywords:\s*(.+)', docstring)
+    keywords_match = re.search(r'Keywords:\s*(.+)', docstring, re.DOTALL)
     keywords = []
     if keywords_match:
-        keywords = [k.strip() for k in keywords_match.group(1).split(',')]
+        keywords = [k.strip() for k in keywords_match.group(1).replace('\n', ' ').split(',') if k.strip()]
     
     # Extract parameters
     args_section = re.search(r'Args:\s*\n(.*?)(?=Returns:|$)', docstring, re.DOTALL)
@@ -38,6 +38,18 @@ def parse_google_docstring(func) -> Dict:
                     param_name, param_type, param_desc = match.groups()
                     parameters[param_name] = f"{param_type} - {param_desc}"
     
+    # Extract examples
+    examples_section = re.search(r'Examples:\s*\n(.*?)(?=Args:|Returns:|$)', docstring, re.DOTALL)
+    examples = []
+    if examples_section:
+        for line in examples_section.group(1).split('\n'):
+            line = line.strip()
+            if line and line.startswith('-'):
+                # Remove leading dash and quotes, clean up
+                example = line[1:].strip().strip('"')
+                if example:  # Only add non-empty examples
+                    examples.append(example)
+    
     # Extract return type
     returns_match = re.search(r'Returns:\s*\n\s*(\w+)\s*:\s*(.+)', docstring)
     return_type = None
@@ -48,6 +60,7 @@ def parse_google_docstring(func) -> Dict:
         "description": description,
         "category": category,
         "keywords": keywords,
+        "examples": examples,
         "parameters": parameters,
         "returns": return_type
     }
@@ -63,6 +76,7 @@ class ToolBox:
             "description": metadata.get("description", ""),
             "category": metadata.get("category", "general"),
             "keywords": metadata.get("keywords", []),
+            "examples": metadata.get("examples", []),
             "parameters": metadata.get("parameters", {}),
             "returns": metadata.get("returns", ""),
             "signature": inspect.signature(func)
