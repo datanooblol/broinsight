@@ -1,6 +1,6 @@
 from broinsight.statemachines.group_statemachine import StateGroup
 from .specs import FlowState, FlowContext
-from broinsight.utils.register import agent, AgentRegistry
+from broinsight.agents.register import agent, AgentRegistry
 
 router_flow = StateGroup("router_flow")
 

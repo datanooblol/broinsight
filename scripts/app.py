@@ -5,7 +5,7 @@ import seaborn as sns
 def main():
     catalog = DataCatalog()
     catalog.register("tips", sns.load_dataset('tips'))
-    machine = combined_app.create_machine(FlowState.ROUTER, FlowState.COMPLETE)
+    machine = combined_app.create_machine(FlowState.IS_TOOL, FlowState.COMPLETE)
     chat_history = []
     while True:
         context = FlowContext(user_input="", catalog=catalog)

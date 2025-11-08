@@ -32,3 +32,11 @@ class PromptHub:
     @property
     def router(self):
         return _run(filename="router.md")
+
+    @property
+    def tool_selection(self):
+        return _run(filename="tool_selection.md")
+
+    @property
+    def tool_parsing(self):
+        return _run(filename="tool_parsing.md")

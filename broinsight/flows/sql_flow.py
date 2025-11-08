@@ -3,7 +3,7 @@ from broinsight.prompt_hub import PromptHub
 from broinsight.core.llm import LocalOpenAI, UserMessage
 from broinsight.utils.parse_string import parse_sql
 from .specs import FlowState, FlowContext
-from broinsight.utils.register import agent
+from broinsight.agents.register import agent
 sql_flow = StateGroup("sql_flow")
 
 @agent("sql_flow")

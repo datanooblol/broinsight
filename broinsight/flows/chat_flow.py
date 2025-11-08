@@ -2,7 +2,7 @@ from broinsight.statemachines.group_statemachine import StateGroup
 from broinsight.prompt_hub import PromptHub
 from broinsight.core.llm import LocalOpenAI, UserMessage, AIMessage
 from .specs import FlowState, FlowContext
-from broinsight.utils.register import agent
+from broinsight.agents.register import agent
 
 chat_flow = StateGroup("chat_flow")
 
