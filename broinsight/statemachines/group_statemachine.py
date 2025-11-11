@@ -1,7 +1,12 @@
 from broinsight.statemachines.utils import get_state_str, get_return_values_ast
 from pathlib import Path
-from typing import Optional, Literal
+from typing import Optional, Literal, Protocol
 from .utils import to_mermaid_with_conditions
+
+class StateGroupProtocol(Protocol):
+    """Protocol for state group interface"""
+    def get(self, state_name): ...
+    def state_graph(self): ...
 
 class StateGroup:
     def __init__(self, name: str = "default"):
@@ -33,7 +38,7 @@ class StateGroup:
         return GroupStateMachine(self, start_state, end_state)
 
 class GroupStateMachine:
-    def __init__(self, state_group: StateGroup, start_state, end_state):
+    def __init__(self, state_group: StateGroupProtocol, start_state, end_state):
         self.state_group = state_group
         self.start_state = start_state
         self.end_state = get_state_str(end_state)

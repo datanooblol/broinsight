@@ -9,52 +9,66 @@ def parse_google_docstring(func) -> Dict:
     if not docstring:
         return {}
     
-    # Extract description (first line)
-    lines = docstring.strip().split('\n')
-    description = lines[0].strip()
+    # Split into sections
+    sections = {}
+    current_section = "description"
+    current_content = []
+    
+    for line in docstring.split('\n'):
+        # Check if line starts a new section
+        section_match = re.match(r'^\s*(Keywords|Category|Examples|Args|Returns):\s*(.*)', line)
+        if section_match:
+            # Save previous section
+            if current_content:
+                sections[current_section] = '\n'.join(current_content).strip()
+            # Start new section
+            current_section = section_match.group(1).lower()
+            current_content = [section_match.group(2)] if section_match.group(2) else []
+        else:
+            current_content.append(line)
+    
+    # Save last section
+    if current_content:
+        sections[current_section] = '\n'.join(current_content).strip()
+    
+    # Extract description (first line of description section)
+    description = sections.get('description', '').split('\n')[0].strip()
     
     # Extract category
-    category_match = re.search(r'Category:\s*(.+)', docstring)
-    category = "general"
-    if category_match:
-        category = category_match.group(1).strip()
+    category = sections.get('category', 'general').strip()
     
     # Extract keywords
-    keywords_match = re.search(r'Keywords:\s*(.+)', docstring, re.DOTALL)
     keywords = []
-    if keywords_match:
-        keywords = [k.strip() for k in keywords_match.group(1).replace('\n', ' ').split(',') if k.strip()]
+    if 'keywords' in sections:
+        keywords = [k.strip() for k in sections['keywords'].replace('\n', ' ').split(',') if k.strip()]
     
     # Extract parameters
-    args_section = re.search(r'Args:\s*\n(.*?)(?=Returns:|$)', docstring, re.DOTALL)
     parameters = {}
-    if args_section:
-        for line in args_section.group(1).split('\n'):
+    if 'args' in sections:
+        for line in sections['args'].split('\n'):
             line = line.strip()
             if line and ':' in line:
-                # Parse: param_name (type) : description
                 match = re.match(r'(\w+)\s*\(([^)]+)\)\s*:\s*(.+)', line)
                 if match:
                     param_name, param_type, param_desc = match.groups()
                     parameters[param_name] = f"{param_type} - {param_desc}"
     
     # Extract examples
-    examples_section = re.search(r'Examples:\s*\n(.*?)(?=Args:|Returns:|$)', docstring, re.DOTALL)
     examples = []
-    if examples_section:
-        for line in examples_section.group(1).split('\n'):
+    if 'examples' in sections:
+        for line in sections['examples'].split('\n'):
             line = line.strip()
             if line and line.startswith('-'):
-                # Remove leading dash and quotes, clean up
                 example = line[1:].strip().strip('"')
-                if example:  # Only add non-empty examples
+                if example:
                     examples.append(example)
     
     # Extract return type
-    returns_match = re.search(r'Returns:\s*\n\s*(\w+)\s*:\s*(.+)', docstring)
     return_type = None
-    if returns_match:
-        return_type = f"{returns_match.group(1)} - {returns_match.group(2)}"
+    if 'returns' in sections:
+        returns_match = re.match(r'\s*(\w+)\s*:\s*(.+)', sections['returns'])
+        if returns_match:
+            return_type = f"{returns_match.group(1)} - {returns_match.group(2)}"
     
     return {
         "description": description,
